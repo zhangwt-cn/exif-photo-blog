@@ -10,12 +10,12 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 export default function ImageWithFallback(props: ImageProps & {
   blurCompatibilityLevel?: 'none' | 'low' | 'high'
   imgClassName?: string,
-  src:string,
 }) {
   const {
     className,
     priority,
     blurDataURL,
+    src,
     blurCompatibilityLevel = 'low',
     imgClassName = 'object-cover h-full',
     ...rest
