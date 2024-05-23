@@ -85,7 +85,7 @@ export default function ImageWithFallback(props: ImageProps & {
           {(BLUR_ENABLED && blurDataURL)
             ? <img {...{
               ...rest,
-              src: blurDataURL,
+              src: rest.src,
               className: clsx(
                 imgClassName,
                 getBlurClass(),
