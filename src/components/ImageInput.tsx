@@ -100,7 +100,6 @@ export default function ImageInput({
 
                   const isPng = callbackArgs.extension === 'png';
                   console.log(callbackArgs.extension);
-
                   const canvas = ref.current;
 
                   // Specify wide gamut to avoid data loss while resizing
@@ -115,7 +114,7 @@ export default function ImageInput({
                     setImage(image);
 
                     ctx.save();
-
+                    
                     let orientation = await exifr
                       .orientation(file)
                       .catch(() => 1) ?? 1;
@@ -125,19 +124,19 @@ export default function ImageInput({
                       // Reverse engineer orientation
                       // so preserved EXIF data can be copied
                       switch (orientation) {
-                        case 1: orientation = 1; break;
-                        case 2: orientation = 1; break;
-                        case 3: orientation = 3; break;
-                        case 4: orientation = 1; break;
-                        case 5: orientation = 1; break;
-                        case 6: orientation = 8; break;
-                        case 7: orientation = 1; break;
-                        case 8: orientation = 6; break;
+                      case 1: orientation = 1; break;
+                      case 2: orientation = 1; break;
+                      case 3: orientation = 3; break;
+                      case 4: orientation = 1; break;
+                      case 5: orientation = 1; break;
+                      case 6: orientation = 8; break;
+                      case 7: orientation = 1; break;
+                      case 8: orientation = 6; break;
                       }
                     }
 
                     const ratio = image.width / image.height;
-
+  
                     const width =
                       Math.round(ratio >= 1 ? maxSize : maxSize * ratio);
                     const height =
@@ -149,45 +148,45 @@ export default function ImageInput({
                     // Orientation transforms from:
                     // eslint-disable-next-line max-len
                     // https://gist.github.com/SagiMedina/f00a57de4e211456225d3114fd10b0d0
-
-                    switch (orientation) {
-                      case 2:
-                        ctx.translate(width, 0);
-                        ctx.scale(-1, 1);
-                        break;
-                      case 3:
-                        ctx.translate(width, height);
-                        ctx.rotate((180 / 180) * Math.PI);
-                        break;
-                      case 4:
-                        ctx.translate(0, height);
-                        ctx.scale(1, -1);
-                        break;
-                      case 5:
-                        canvas.width = height;
-                        canvas.height = width;
-                        ctx.rotate((90 / 180) * Math.PI);
-                        ctx.scale(1, -1);
-                        break;
-                      case 6:
-                        canvas.width = height;
-                        canvas.height = width;
-                        ctx.rotate((90 / 180) * Math.PI);
-                        ctx.translate(0, -height);
-                        break;
-                      case 7:
-                        canvas.width = height;
-                        canvas.height = width;
-                        ctx.rotate((270 / 180) * Math.PI);
-                        ctx.translate(-width, height);
-                        ctx.scale(1, -1);
-                        break;
-                      case 8:
-                        canvas.width = height;
-                        canvas.height = width;
-                        ctx.translate(0, width);
-                        ctx.rotate((270 / 180) * Math.PI);
-                        break;
+                    
+                    switch(orientation) {
+                    case 2:
+                      ctx.translate(width, 0);
+                      ctx.scale(-1, 1);
+                      break;
+                    case 3:
+                      ctx.translate(width, height);
+                      ctx.rotate((180 / 180) * Math.PI);
+                      break;
+                    case 4:
+                      ctx.translate(0, height);
+                      ctx.scale(1, -1);
+                      break;
+                    case 5:
+                      canvas.width = height;
+                      canvas.height = width;
+                      ctx.rotate((90 / 180) * Math.PI);
+                      ctx.scale(1, -1);
+                      break;
+                    case 6:
+                      canvas.width = height;
+                      canvas.height = width;
+                      ctx.rotate((90 / 180) * Math.PI);
+                      ctx.translate(0, -height);
+                      break;
+                    case 7:
+                      canvas.width = height;
+                      canvas.height = width;
+                      ctx.rotate((270 / 180) * Math.PI);
+                      ctx.translate(-width, height);
+                      ctx.scale(1, -1);
+                      break;
+                    case 8:
+                      canvas.width = height;
+                      canvas.height = width;
+                      ctx.translate(0, width);
+                      ctx.rotate((270 / 180) * Math.PI);
+                      break;
                     }
 
                     ctx.drawImage(image, 0, 0, width, height);
@@ -197,36 +196,14 @@ export default function ImageInput({
                     canvas.toBlob(
                       async blob => {
                         if (blob) {
-                          try {
-                            const fileType = file.type;
-                            if (fileType.startsWith('video/')) {
-                              // If the file is a video, do not process it
-                              await onBlobReady?.({
-                                ...callbackArgs,
-                                blob,
-                              });
-                            } else {
-                              // If the file is an image, process it
-                              const blobWithExif = await CopyExif(file, blob)
-                                // Fallback to original blob if EXIF data is missing
-                                // or image is in PNG format which cannot be parsed
-                                .catch(err => {
-                                  console.error('Error copying EXIF data:', err);
-                                  return blob;
-                                });
-                              await onBlobReady?.({
-                                ...callbackArgs,
-                                blob: blobWithExif,
-                              });
-                            }
-                          } catch (error) {
-                            console.error('Error processing file:', error);
-                            // Optionally, you can still call the callback with the original blob
-                            await onBlobReady?.({
-                              ...callbackArgs,
-                              blob,
-                            });
-                          }
+                          const blobWithExif = await CopyExif(file, blob)
+                            // Fallback to original blob if EXIF data is missing
+                            // or image is in PNG format which cannot be parsed
+                            .catch(() => blob);
+                          await onBlobReady?.({
+                            ...callbackArgs,
+                            blob: blobWithExif,
+                          });
                         }
                       },
                       'image/jpeg',
@@ -261,47 +238,3 @@ export default function ImageInput({
     </div>
   );
 }
-
-const handleVideoUpload = async (file: File, callbackArgs: any, onBlobReady?: (args: any) => void) => {
-  try {
-    const fileType = file.type;
-    if (!fileType.startsWith('video/')) {
-      throw new Error('Unsupported file type');
-    }
-
-    const blob = await new Promise<Blob>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve(reader.result as Blob);
-      reader.onerror = reject;
-      reader.readAsArrayBuffer(file);
-    });
-
-    await onBlobReady?.({
-      ...callbackArgs,
-      blob,
-    });
-  } catch (error) {
-    console.error('Error processing video file:', error);
-    // Optionally, you can still call the callback with null or handle error accordingly
-    await onBlobReady?.({
-      ...callbackArgs,
-      blob: null,
-    });
-  }
-};
-
-// Usage example within your component
-const VideoInput = ({ onBlobReady }) => {
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      handleVideoUpload(file, {}, onBlobReady);
-    }
-  };
-
-  return (
-    <input type="file" accept="video/*" onChange={handleFileChange} />
-  );
-};
-
-export default VideoInput;
