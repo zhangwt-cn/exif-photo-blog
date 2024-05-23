@@ -9,7 +9,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 export default function ImageWithFallback(props: ImageProps & {
   blurCompatibilityLevel?: 'none' | 'low' | 'high'
-  imgClassName?: string
+  imgClassName?: string,
+  src:string,
 }) {
   const {
     className,
@@ -85,7 +86,7 @@ export default function ImageWithFallback(props: ImageProps & {
           {(BLUR_ENABLED && blurDataURL)
             ? <img {...{
               ...rest,
-              src: rest.src,
+              src: src,
               className: clsx(
                 imgClassName,
                 getBlurClass(),

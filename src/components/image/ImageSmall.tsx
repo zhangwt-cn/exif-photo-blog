@@ -5,6 +5,7 @@ export default function ImageSmall(props: ImageProps) {
   const {
     aspectRatio,
     blurCompatibilityMode,
+    src,
     ...rest
   } = props;
   return (
