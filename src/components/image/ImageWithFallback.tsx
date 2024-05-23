@@ -106,7 +106,7 @@ export default function ImageWithFallback(props: ImageProps & {
             )} />}
         </div>}
 
-      {photos_url && photos_url.endsWith('.mp4') || photos_url.endsWith('.mov') ? (
+      {photos_url && (photos_url.endsWith('.mp4') || photos_url.endsWith('.mov')) ? (
         <video
           {...rest}
           className={imgClassName}
