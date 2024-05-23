@@ -38,6 +38,11 @@ export default function PhotoMedium({
 
   useOnVisible(ref, onVisible);
 
+  // Function to determine if the URL is an image or video
+  const isVideo = (url: string) => {
+    return /\.(mp4|webm|ogg)$/.test(url);
+  };
+
   return (
     <Link
       ref={ref}
@@ -49,16 +54,25 @@ export default function PhotoMedium({
       )}
       prefetch={prefetch}
     >
-      <ImageMedium
-        src={photo.url}
-        aspectRatio={photo.aspectRatio}
-        blurDataURL={photo.blurData}
-        blurCompatibilityMode={doesPhotoNeedBlurCompatibility(photo)}
-        className="flex object-cover w-full h-full"
-        imgClassName="object-cover w-full h-full"
-        alt={altTextForPhoto(photo)}
-        priority={priority}
-      />
+      {isVideo(photo.url) ? (
+        <video
+          src={photo.url}
+          className="flex object-cover w-full h-full"
+          controls
+          alt={altTextForPhoto(photo)}
+        />
+      ) : (
+        <ImageMedium
+          src={photo.url}
+          aspectRatio={photo.aspectRatio}
+          blurDataURL={photo.blurData}
+          blurCompatibilityMode={doesPhotoNeedBlurCompatibility(photo)}
+          className="flex object-cover w-full h-full"
+          imgClassName="object-cover w-full h-full"
+          alt={altTextForPhoto(photo)}
+          priority={priority}
+        />
+      )}
     </Link>
   );
 };
