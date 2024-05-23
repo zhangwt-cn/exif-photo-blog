@@ -71,7 +71,7 @@ export default function ImageWithFallback(props: ImageProps & {
   } else {
     photos_url = rest.src
   }
-  console.log(rest.src)
+  console.log(photos_url)
 
 
   return (
