@@ -23,7 +23,7 @@ export const getNextImageUrlForRequest = (
 
   // if url is video
   if (/\.(mp4|webm|ogg|mov)$/.test(imageUrl)) {
-    return imageUrl;
+    return imageUrl + "?w=" + size.toString() + "&q=" + quality.toString();
   }
 
   return url.toString();
