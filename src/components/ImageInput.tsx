@@ -99,7 +99,7 @@ export default function ImageInput({
                   };
 
                   const isPng = callbackArgs.extension === 'png';
-                  const isVideo = file.type.startsWith('video/');
+                  console.log(callbackArgs.extension);
 
                   const canvas = ref.current;
 
@@ -108,7 +108,7 @@ export default function ImageInput({
                     '2d', { colorSpace: 'display-p3' }
                   );
 
-                  if ((shouldResize || isPng) && canvas && ctx && !isVideo) {
+                  if ((shouldResize || isPng) && canvas && ctx) {
                     // Process images that need resizing
                     const image = await blobToImage(file);
 
