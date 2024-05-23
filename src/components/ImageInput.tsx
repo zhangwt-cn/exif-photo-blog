@@ -196,22 +196,34 @@ export default function ImageInput({
                     canvas.toBlob(
                       async blob => {
                         if (blob) {
-                          const fileType = file.type;
-                          if (fileType.startsWith('video/')) {
-                            // If the file is a video, do not process it
+                          try {
+                            const fileType = file.type;
+                            if (fileType.startsWith('video/')) {
+                              // If the file is a video, do not process it
+                              await onBlobReady?.({
+                                ...callbackArgs,
+                                blob,
+                              });
+                            } else {
+                              // If the file is an image, process it
+                              const blobWithExif = await CopyExif(file, blob)
+                                // Fallback to original blob if EXIF data is missing
+                                // or image is in PNG format which cannot be parsed
+                                .catch(err => {
+                                  console.error('Error copying EXIF data:', err);
+                                  return blob;
+                                });
+                              await onBlobReady?.({
+                                ...callbackArgs,
+                                blob: blobWithExif,
+                              });
+                            }
+                          } catch (error) {
+                            console.error('Error processing file:', error);
+                            // Optionally, you can still call the callback with the original blob
                             await onBlobReady?.({
                               ...callbackArgs,
                               blob,
-                            });
-                          } else {
-                            // If the file is an image, process it
-                            const blobWithExif = await CopyExif(file, blob)
-                              // Fallback to original blob if EXIF data is missing
-                              // or image is in PNG format which cannot be parsed
-                              .catch(() => blob);
-                            await onBlobReady?.({
-                              ...callbackArgs,
-                              blob: blobWithExif,
                             });
                           }
                         }
