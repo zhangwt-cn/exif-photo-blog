@@ -217,6 +217,11 @@ export default function PhotoForm({
     hideIfEmpty?: boolean,
     shouldHide?: (formData: Partial<PhotoFormData>) => boolean,
   ) => {
+    if (!formData['extension'] && formData['url']) {
+      // 获取url 文件后缀名
+      formData['extension'] = formData['url'].split('.').pop() || '';
+    }
+
     if (
       key === 'blurData' &&
       type === 'create' &&
@@ -227,7 +232,7 @@ export default function PhotoForm({
     } else {
       return (
         (hideIfEmpty && !formData[key]) ||
-        shouldHide?.(formData)
+        shouldHide?.(formData) || false
       );
     }
   };
