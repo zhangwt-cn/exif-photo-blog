@@ -97,7 +97,6 @@ export default function ImageWithFallback(props: ImageProps & {
             )} />}
         </div>}
 
-      console.log(imgRef);
       <Image {...{
         ...rest,
         ref: imgRef,
