@@ -35,8 +35,6 @@ export const ACCEPTED_PHOTO_FILE_TYPES = [
   'image/jpg',
   'image/jpeg',
   'image/png',
-  'video/mp4',
-  'video/quicktime',
 ];
 
 export const MAX_PHOTO_UPLOAD_SIZE_IN_BYTES = 50_000_000;
