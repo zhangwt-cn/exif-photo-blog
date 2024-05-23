@@ -110,7 +110,7 @@ export default function ImageWithFallback(props: ImageProps & {
         <video
           {...rest}
           className={imgClassName}
-          src={photos_url}
+          src={photos_url ?? ""}
           autoPlay
           loop
           muted
