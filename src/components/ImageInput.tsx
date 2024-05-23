@@ -99,7 +99,7 @@ export default function ImageInput({
                   };
 
                   const isPng = callbackArgs.extension === 'png';
-                  console.log(callbackArgs.extension);
+                  console.log(file.type);
                   const canvas = ref.current;
 
                   // Specify wide gamut to avoid data loss while resizing
