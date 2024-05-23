@@ -64,7 +64,7 @@ export default function ImageWithFallback(props: ImageProps & {
     }
   };
 
-  var photos_url = ""
+  var photos_url
 
   if (typeof rest.src !== 'string') {
     photos_url = blurDataURL
