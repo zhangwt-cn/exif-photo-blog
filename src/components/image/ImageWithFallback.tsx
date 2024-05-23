@@ -108,14 +108,8 @@ export default function ImageWithFallback(props: ImageProps & {
 
       {photos_url && (photos_url.endsWith('.mp4') || photos_url.endsWith('.mov')) ? (
         <video
-          {...rest}
           className={imgClassName}
           src={photos_url ?? ""}
-          autoPlay
-          loop
-          muted
-          onLoadStart={onLoad}
-          onError={onError}
         >
         </video>
       ) : (
