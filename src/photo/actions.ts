@@ -49,7 +49,7 @@ export const createPhotoAction = async (formData: FormData) =>
   runAuthenticatedAdminServerAction(async () => {
     const photo = convertFormDataToPhotoDbInsert(formData, true);
 
-    const updatedUrl = await convertUploadToPhoto(photo.url);
+    const updatedUrl = await convertUploadToPhoto(photo.url, photo.extension);
     
     if (updatedUrl) {
       photo.url = updatedUrl;
@@ -67,7 +67,7 @@ export const updatePhotoAction = async (formData: FormData) =>
     if (photo.hidden && photo.url.includes(photo.id)) {
       // Anonymize storage url on update if necessary by
       // re-running image upload transfer logic
-      url = await convertUploadToPhoto(photo.url);
+      url = await convertUploadToPhoto(photo.url, photo.extension);
       if (url) { photo.url = url; }
     }
 
