@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { BLUR_ENABLED } from '@/site/config';
 import { useAppState } from '@/state/AppState';
-import { clsx } from 'clsx/lite';
+import { clsx}  from 'clsx/lite';
 import Image, { ImageProps } from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
@@ -56,11 +56,11 @@ export default function ImageWithFallback(props: ImageProps & {
 
   const getBlurClass = () => {
     switch (blurCompatibilityLevel) {
-      case 'high':
-        // Fix poorly blurred placeholder data generated on client
-        return 'blur-[4px] @xs:blue-md scale-[1.05]';
-      case 'low':
-        return 'blur-[2px] @xs:blue-md scale-[1.01]';
+    case 'high':
+      // Fix poorly blurred placeholder data generated on client
+      return 'blur-[4px] @xs:blue-md scale-[1.05]';
+    case 'low':
+      return 'blur-[2px] @xs:blue-md scale-[1.01]';
     }
   };
 
@@ -94,35 +94,26 @@ export default function ImageWithFallback(props: ImageProps & {
           {(BLUR_ENABLED && blurDataURL)
             ? <img {...{
               ...rest,
-              src: photos_url,
+              src: blurDataURL,
               className: clsx(
                 imgClassName,
                 getBlurClass(),
               ),
             }} />
-            : <div className={clsx(
+            :  <div className={clsx(
               'w-full h-full',
               'bg-gray-100/50 dark:bg-gray-900/50',
             )} />}
         </div>}
 
-      {photos_url && (photos_url.endsWith('.mp4') || photos_url.endsWith('.mov')) ? (
-        <video
-          className={imgClassName}
-          src={photos_url ?? ""}
-        >
-        </video>
-      ) : (
-        <Image {...{
-          ...rest,
-          ref: imgRef,
-          priority,
-          className: imgClassName,
-          onLoad,
-          onError,
-        }} />
-      )}
-
+      <Image {...{
+        ...rest,
+        ref: imgRef,
+        priority,
+        className: imgClassName,
+        onLoad,
+        onError,
+      }} />
     </div>
   );
 }
