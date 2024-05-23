@@ -11,6 +11,7 @@ export default function ImageSmall(props: ImageProps) {
   return (
     <ImageWithFallback {...{
       ...rest,
+      src: src,
       blurCompatibilityLevel: blurCompatibilityMode ? 'high' : 'none',
       width: IMAGE_WIDTH_SMALL,
       height: Math.round(IMAGE_WIDTH_SMALL / aspectRatio),
