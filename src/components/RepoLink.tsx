@@ -9,7 +9,6 @@ export default function RepoLink() {
         Made with
       </span>
         zhangwt
-      </Link>
     </span>
   );
 }
