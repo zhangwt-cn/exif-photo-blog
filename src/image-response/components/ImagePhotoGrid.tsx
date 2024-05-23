@@ -52,29 +52,46 @@ export default function ImagePhotoGrid({
       justifyContent: 'center',
       gap,
     }}>
-      {photos.slice(0, count).map(({ id, url }) =>
-        <div
-          key={id}
-          style={{
-            display: 'flex',
-            width: cellWidth,
-            height: cellHeight,
-            overflow: 'hidden',
-            filter: 'saturate(1.1)',
-          }}
-        >
-          <img {...{
-            src: getNextImageUrlForRequest(url, nextImageWidth),
-            style: {
-              width: '100%',
-              ...imagePosition === 'center' && {
-                height: '100%',
-              },
-              objectFit: 'cover',
-            },
-          }} />
-        </div>
-      )}
+      {photos.slice(0, count).map(({ id, url }) => {
+        const isVideo = url.endsWith('.mp4') || url.endsWith('.webm') || url.endsWith(".mov");
+        return (
+          <div
+            key={id}
+            style={{
+              display: 'flex',
+              width: cellWidth,
+              height: cellHeight,
+              overflow: 'hidden',
+              filter: 'saturate(1.1)',
+            }}
+          >
+            {isVideo ? (
+              <video
+                src={getNextImageUrlForRequest(url, nextImageWidth)}
+                style={{
+                  width: '100%',
+                  ...imagePosition === 'center' && {
+                    height: '100%',
+                  },
+                  objectFit: 'cover',
+                }}
+                controls
+              />
+            ) : (
+              <img
+                src={getNextImageUrlForRequest(url, nextImageWidth)}
+                style={{
+                  width: '100%',
+                  ...imagePosition === 'center' && {
+                    height: '100%',
+                  },
+                  objectFit: 'cover',
+                }}
+              />
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }
