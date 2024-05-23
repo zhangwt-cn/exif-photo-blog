@@ -59,7 +59,7 @@ export default function PhotoMedium({
           src={photo.url}
           className="flex object-cover w-full h-full"
           controls
-          alt={altTextForPhoto(photo)}
+          // alt={altTextForPhoto(photo)}
         />
       ) : (
         <ImageMedium
