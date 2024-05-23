@@ -98,25 +98,19 @@ export default function ImageWithFallback(props: ImageProps & {
         </div>}
       {rest.src && rest.src.endsWith('.mp4') ? (
         <video
-          {...rest}
-          ref={imgRef}
-          className={imgClassName}
-          onLoadedData={onLoad}
-          onError={onError}
-          autoPlay
-          loop
-          muted
-          playsInline
+        src={imgRef}
+        className={imgClassName}
+        controls
+        // alt={altTextForPhoto(photo)}
         />
-      ) : null}
-      <Image {...{
+      ) : (<Image {...{
         ...rest,
         ref: imgRef,
         priority,
         className: imgClassName,
         onLoad,
         onError,
-      }} />
+      }} />)}
     </div>
   );
 }
