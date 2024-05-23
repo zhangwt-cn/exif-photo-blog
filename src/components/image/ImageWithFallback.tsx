@@ -96,7 +96,7 @@ export default function ImageWithFallback(props: ImageProps & {
               'bg-gray-100/50 dark:bg-gray-900/50',
             )} />}
         </div>}
-      {rest.src && rest.src.endsWith('.mp4') ? (
+      {imgRef && imgRef.endsWith('.mp4') ? (
         <video
         src={imgRef}
         className={imgClassName}
