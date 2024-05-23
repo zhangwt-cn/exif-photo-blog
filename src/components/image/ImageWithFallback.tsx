@@ -96,21 +96,16 @@ export default function ImageWithFallback(props: ImageProps & {
               'bg-gray-100/50 dark:bg-gray-900/50',
             )} />}
         </div>}
-      {imgRef && imgRef.endsWith('.mp4') ? (
-        <video
-        src={imgRef}
-        className={imgClassName}
-        controls
-        // alt={altTextForPhoto(photo)}
-        />
-      ) : (<Image {...{
+
+      console.log(imgRef);
+      <Image {...{
         ...rest,
         ref: imgRef,
         priority,
         className: imgClassName,
         onLoad,
         onError,
-      }} />)}
+      }} />
     </div>
   );
 }
