@@ -99,6 +99,7 @@ export default function ImageInput({
                   };
 
                   const isPng = callbackArgs.extension === 'png';
+                  const isVideo = file.type.startsWith('video/');
 
                   const canvas = ref.current;
 
@@ -107,7 +108,7 @@ export default function ImageInput({
                     '2d', { colorSpace: 'display-p3' }
                   );
 
-                  if ((shouldResize || isPng) && canvas && ctx) {
+                  if ((shouldResize || isPng) && canvas && ctx && !isVideo) {
                     // Process images that need resizing
                     const image = await blobToImage(file);
 
@@ -260,3 +261,47 @@ export default function ImageInput({
     </div>
   );
 }
+
+const handleVideoUpload = async (file: File, callbackArgs: any, onBlobReady?: (args: any) => void) => {
+  try {
+    const fileType = file.type;
+    if (!fileType.startsWith('video/')) {
+      throw new Error('Unsupported file type');
+    }
+
+    const blob = await new Promise<Blob>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as Blob);
+      reader.onerror = reject;
+      reader.readAsArrayBuffer(file);
+    });
+
+    await onBlobReady?.({
+      ...callbackArgs,
+      blob,
+    });
+  } catch (error) {
+    console.error('Error processing video file:', error);
+    // Optionally, you can still call the callback with null or handle error accordingly
+    await onBlobReady?.({
+      ...callbackArgs,
+      blob: null,
+    });
+  }
+};
+
+// Usage example within your component
+const VideoInput = ({ onBlobReady }) => {
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      handleVideoUpload(file, {}, onBlobReady);
+    }
+  };
+
+  return (
+    <input type="file" accept="video/*" onChange={handleFileChange} />
+  );
+};
+
+export default VideoInput;
